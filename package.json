@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "express": "^4.6.1",
+    "mobile-detect": "^0.4.0",
+    "socket.io": "^1.0.6"
+  },
+  "devDependencies": {},
+  "name": "mobdes",
+  "version": "0.1.0"
+}
