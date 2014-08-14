@@ -3,9 +3,12 @@ var Session = require(__dirname + "/Session");
 var Message = require(path.resolve(__dirname + "/../../common/") + "/Message");
 
 module.exports = (function() {
+	var _this;
+
 	function Channel(id) {
 		this.id = id;
 		this.sessions = [];
+		_this = this;
 	}
 
 	Channel.prototype = {
@@ -13,18 +16,34 @@ module.exports = (function() {
 			var session = new Session(type, socket);
 			this.sessions.push(session);
 			socket.join(this.id);
+			socket.on(Message.YO, _this.onYo);
 		},
 
 		remove: function(socket) {
+			socket.removeListener(Message.YO, _this.onYo);
 			var session = this.findSessionBySocket(socket);
 			this.sessions.splice(this.sessions.indexOf(session), 1);
 		},
 
 		removeAll: function() {
+			var socket;
 			for(var i = 0; i < this.sessions.length; i++) {
-				this.sessions[i].socket.disconnect();
+				socket = this.sessions[i].socket;
+				socket.removeListener(Message.YO, _this.onYo);
+				socket.disconnect();
 			}
 			this.sessions = [];
+		},
+
+		onYo: function(yo) {
+			var session = _this.findSessionBySocket(this);
+			var type;
+			if(session.type == "desktop") {
+				type = "mobile";
+			} else if(session.type == "mobile") {
+				type = "desktop";
+			}
+			_this.notifyYo(type, yo);
 		},
 
 		notifyNoDesktop: function() {
@@ -33,6 +52,16 @@ module.exports = (function() {
 
 		notifyNoMobile: function() {
 			this.notify(Message.NO_MOBILE);
+		},
+
+		notifyYo: function(type, yo) {
+			var session;
+			for(var i = 0; i < this.sessions.length; i++) {
+				session = this.sessions[i];
+				if(session.type == type) {
+					session.socket.emit(Message.YO, yo);
+				}
+			}
 		},
 
 		notify: function(message) {

@@ -20,6 +20,10 @@ var MobdesClient = (function() {
 			this.socket.on("connected", this.onConnected);
 		},
 
+		send: function(yo) {
+			this.socket.emit(Message.YO, yo);
+		}
+
 		onConnected: function(socketId) {
 			console.log("onConnected");
 
@@ -28,6 +32,7 @@ var MobdesClient = (function() {
 			this.socket.on("handshakeResponse", this.onHandShakeResponse);
 			this.socket.on(Message.NO_MOBILE, this.onNoMobile);
 			this.socket.on(Message.NO_DESKTOP, this.onNoDesktop);
+			this.socket.on(Message.YO, this.onYo);
 			this.socket.emit("handshake", {socketId: this.socketId, device: this.device, roomId: this.roomId});
 		},
 
@@ -52,6 +57,10 @@ var MobdesClient = (function() {
 
 		onNoMobile: function() {
 			console.log("onNoMobile");
+		},
+
+		onYo: function(yo) {
+			console.log("onYo", yo);
 		}
 	};
 
