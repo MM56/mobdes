@@ -12,11 +12,14 @@ var MobdesClient = (function() {
 		socket: null,
 		socketId: null,
 
-		connect: function(device, roomId) {
+		connect: function(url, device, roomId) {
 			console.log("connect");
+			if(url == null) {
+				url = "http://127.0.0.1:3000";
+			}
 			this.device = device;
 			this.roomId = roomId;
-			this.socket = io();
+			this.socket = io(url);
 			this.socket.on("connected", this.onConnected);
 		},
 
