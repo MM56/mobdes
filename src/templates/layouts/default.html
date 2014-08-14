@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Socket.IO chat</title>
+	<title>Socket.IO</title>
 	<style>
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body { font: 13px Helvetica, Arial; }
@@ -22,12 +22,8 @@
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="/client/MobdesClient.js"></script>
 	<script>
-		// var device = "desktop";
-		// if(window.location.pathname == "/mobile") {
-		// 	device = "mobile";
-		// }
-
 		var mobdes = new MobdesClient();
+		mobdes.connect('desktop');
 	</script>
 </body>
 </html>

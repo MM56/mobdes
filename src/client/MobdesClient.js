@@ -22,10 +22,9 @@ var MobdesClient = (function() {
 
 		onConnected: function(socketId) {
 			console.log("onConnected");
+
 			this.socket.off("connected", this.onConnected);
-
 			this.socketId = socketId;
-
 			this.socket.on("handshakeResponse", this.onHandShakeResponse);
 			this.socket.emit("handshake", {socketId: this.socketId, device: this.device, roomId: this.roomId});
 		},
