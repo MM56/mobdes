@@ -1,7 +1,7 @@
 var MobdesClient = (function() {
 
 	function MobdesClient() {
-		console.log("MobdesClient");
+		console.log("MobdesClient", Message);
 		this.onConnected = this.onConnected.bind(this);
 		this.onHandShakeResponse = this.onHandShakeResponse.bind(this);
 	}
@@ -26,6 +26,8 @@ var MobdesClient = (function() {
 			this.socket.off("connected", this.onConnected);
 			this.socketId = socketId;
 			this.socket.on("handshakeResponse", this.onHandShakeResponse);
+			this.socket.on(Message.NO_MOBILE, this.onNoMobile);
+			this.socket.on(Message.NO_DESKTOP, this.onNoDesktop);
 			this.socket.emit("handshake", {socketId: this.socketId, device: this.device, roomId: this.roomId});
 		},
 
@@ -42,6 +44,14 @@ var MobdesClient = (function() {
 					console.log("can't connect to room", this.roomId);
 				}
 			}
+		},
+
+		onNoDesktop: function() {
+			console.log("onNoDesktop");
+		},
+
+		onNoMobile: function() {
+			console.log("onNoMobile");
 		}
 	};
 
