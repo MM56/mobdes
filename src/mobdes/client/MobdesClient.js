@@ -22,7 +22,7 @@ var MobdesClient = (function() {
 
 		send: function(yo) {
 			this.socket.emit(Message.YO, yo);
-		}
+		},
 
 		onConnected: function(socketId) {
 			console.log("onConnected");
