@@ -64,6 +64,18 @@ module.exports = (function() {
 			}
 		},
 
+		notifyConnexion: function(socket, type) {
+			var session;
+			var message = type == "desktop" ? Message.DESKTOP_CONNECTED : Message.MOBILE_CONNECTED;
+			for(var i = 0; i < this.sessions.length; i++) {
+				session = this.sessions[i];
+				if(session.socket == socket) {
+					continue;
+				}
+				session.socket.emit(message);
+			}
+		},
+
 		notify: function(message) {
 			for(var i = 0; i < this.sessions.length; i++) {
 				this.sessions[i].socket.emit(message);
@@ -86,6 +98,24 @@ module.exports = (function() {
 				}
 			}
 			return null;
+		},
+
+		getNbMobile: function() {
+			return this.getNbDevice("mobile");
+		},
+
+		getNbDesktop: function() {
+			return this.getNbDevice("desktop");
+		},
+
+		getNbDevice: function(type) {
+			var nbSessions = 0;
+			for(var i = 0; i < this.sessions.length; i++) {
+				if(this.sessions[i].type == type) {
+					nbSessions++;
+				}
+			}
+			return nbSessions;
 		}
 	};
 

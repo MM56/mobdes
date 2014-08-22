@@ -15,4 +15,6 @@ http.listen(3000, function(){
 });
 
 var MobdesServer = require("./mobdes/server/MobdesServer");
-new MobdesServer(http);
+new MobdesServer(http, {
+	maxMobileConnectionsPerRoom: 1
+});

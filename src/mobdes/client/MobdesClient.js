@@ -1,7 +1,7 @@
 var MobdesClient = (function() {
 
 	function MobdesClient() {
-		console.log("MobdesClient", Message);
+		console.log("MobdesClient");
 		this.onConnected = this.onConnected.bind(this);
 		this.onHandShakeResponse = this.onHandShakeResponse.bind(this);
 	}
@@ -36,7 +36,20 @@ var MobdesClient = (function() {
 			this.socket.on(Message.NO_MOBILE, this.onNoMobile);
 			this.socket.on(Message.NO_DESKTOP, this.onNoDesktop);
 			this.socket.on(Message.YO, this.onYo);
+			if(this.device == "mobile") {
+				this.socket.on(Message.DESKTOP_CONNECTED, this.onDesktopConnected);
+			} else if(this.device == "desktop") {
+				this.socket.on(Message.MOBILE_CONNECTED, this.onMobileConnected);
+			}
 			this.socket.emit("handshake", {socketId: this.socketId, device: this.device, roomId: this.roomId});
+		},
+
+		onDesktopConnected: function() {
+			console.log("onDesktopConnected");
+		},
+
+		onMobileConnected: function() {
+			console.log("onMobileConnected");
 		},
 
 		onHandShakeResponse: function(response) {
