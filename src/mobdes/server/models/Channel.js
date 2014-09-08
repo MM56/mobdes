@@ -15,7 +15,7 @@ module.exports = (function() {
 		for(var i = 0; i < Channel.instances.length; i++) {
 			var channel = Channel.instances[i];
 			for(var j = 0; j < channel.sessions.length; j++) {
-				if(channel.sessions[i].socket == socket) {
+				if(channel.sessions[j].socket == socket) {
 					return channel;
 				}
 			}
@@ -49,6 +49,7 @@ module.exports = (function() {
 		},
 
 		onYo: function(yo) {
+			console.log(Channel.instances, this.id);
 			var channel = Channel.findInstanceBySocket(this);
 			var session = channel.findSessionBySocket(this);
 			var type;
