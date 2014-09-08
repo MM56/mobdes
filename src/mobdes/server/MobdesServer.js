@@ -10,7 +10,6 @@ module.exports = (function() {
 		console.log("MobdesServer");
 		_this = this;
 		this.io = SocketIO(http);
-		this.channels = [];
 		var defaultOptions = {
 			maxMobileConnectionsPerRoom: -1
 		};
@@ -46,12 +45,12 @@ module.exports = (function() {
 		},
 
 		onHandshakeDesktop: function(response, socket) {
-			var roomId = Channel.getUniqueId(this.channels);
+			var roomId = Channel.getUniqueId(Channel.instances);
 
 			var channel = new Channel(roomId);
 			channel.add("desktop", socket);
-			this.channels.push(channel);
-			console.log("add", this.channels);
+			Channel.instances.push(channel);
+			console.log("add", Channel.instances);
 
 			response.roomId = roomId;
 			response.success = true;
@@ -130,14 +129,14 @@ module.exports = (function() {
 		},
 
 		removeChannel: function(channel) {
-			this.channels.splice(this.channels.indexOf(channel), 1);
+			Channel.instances.splice(Channel.instances.indexOf(channel), 1);
 		},
 
 		findChannelBySocket: function(socket) {
 			var channel;
-			var nbChannels = this.channels.length;
+			var nbChannels = Channel.instances.length;
 			for(var i = 0; i < nbChannels; i++) {
-				channel = this.channels[i];
+				channel = Channel.instances[i];
 				if(channel.findSessionBySocket(socket) != null) {
 					return channel;
 				}
@@ -147,9 +146,9 @@ module.exports = (function() {
 
 		findChannelById: function(id) {
 			var channel;
-			var nbChannels = this.channels.length;
+			var nbChannels = Channel.instances.length;
 			for(var i = 0; i < nbChannels; i++) {
-				channel = this.channels[i];
+				channel = Channel.instances[i];
 				if(channel.id == id) {
 					return channel;
 				}
